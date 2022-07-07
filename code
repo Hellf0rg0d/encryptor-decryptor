@@ -1,0 +1,270 @@
+import java.awt.Color;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import javax.swing.JPasswordField;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
+import java.util.concurrent.ScheduledExecutorService;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+
+public class Main {
+
+	private JFrame frame;
+	private JPasswordField raw;
+	private JTextField d;
+	private int c ,shift;
+	private String last;
+	
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Main window = new Main();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Main() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 800,600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setBackground(Color.BLACK);
+		
+		JLabel lblNewLabel_1 = new JLabel("Type the raw text");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 30));
+		lblNewLabel_1.setBounds(10, 187, 774, 79);
+		frame.getContentPane().add(lblNewLabel_1);
+		frame.setBackground(Color.BLACK);
+		
+		raw = new JPasswordField();
+		raw.setFont(new Font("Arial", Font.BOLD, 30));
+		raw.setBounds(272, 251, 272, 36);
+		frame.getContentPane().add(raw);
+		
+		
+		d = new JTextField();
+		d.setFont(new Font("Arial", Font.BOLD, 15));
+		d.setBounds(10, 65, 86, 20);
+		JLabel ans = new JLabel("");
+		ans.setHorizontalAlignment(SwingConstants.CENTER);
+		ans.setFont(new Font("Arial", Font.BOLD, 25));
+		ans.setForeground(Color.WHITE);
+		JButton en = new JButton("Encrypt");
+		
+	
+		
+		en.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					File file = new File("D:\\sc.txt");
+					FileWriter wri = new FileWriter(file,true);
+				//	wri.write("\n");
+					 
+				
+			
+				//JOptionPane.showMessageDialog(null, "Pay me $5 to get message","Trial/Error420",JOptionPane.ERROR_MESSAGE);
+				//JOptionPane.showMessageDialog(null, "JK lol","Trial/Error420",JOptionPane.INFORMATION_MESSAGE);
+				char a[] = raw.getText().toCharArray();
+				int c ,shift;
+				//System.out.println("Type the number to shift ");
+				//d = word.nextInt();
+				//word.close();
+				shift = Integer.parseInt(d.getText());
+				for(int size = 0;size<a.length;size++) {
+					c = a[size];
+					//System.out.println(c);
+					if(a[size] > 96 &&a[size] < 123) {
+						c = c+shift;
+						if(c>122) {
+							c =a[size]-26+shift;
+							//System.out.print(" "+c +" ");
+							//ans.setText(Character.toString((char)c));
+							//System.out.print((char)c);
+						}
+						else {
+							//ans.setText(Character.toString((char)c));
+						//System.out.print((char)c);
+						}
+						wri.write((char)c);
+					}
+					else {
+					}					
+				}
+				wri.close();
+				Scanner sc = new Scanner(file);
+				last = sc.next();
+				//ans.setText(sc.next());
+				//System.out.println(last);
+				sc.close();		
+				file.delete();
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(last),null);
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+					
+				}
+			}
+		});
+		en.setForeground(Color.WHITE);
+		en.setFont(new Font("Arial", Font.BOLD, 25));
+		en.setOpaque(true);
+		en.setFocusable(false);
+		en.setContentAreaFilled(false);
+		en.setBorderPainted(false);
+		en.setBounds(237, 298, 143, 36);
+		
+		ans.setBounds(10, 352, 784, 30);
+		frame.getContentPane().add(ans);
+		frame.getContentPane().add(en);
+		JLabel lblNewLabel = new JLabel("Number of characters to shift");
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setBounds(10, 11, 295, 55);
+		frame.getContentPane().add(lblNewLabel);
+		
+		frame.getContentPane().add(d);
+		d.setColumns(10);
+		JLabel lblNewLabel_2 = new JLabel("Max is 10");
+		lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 17));
+		lblNewLabel_2.setForeground(Color.WHITE);
+		lblNewLabel_2.setBounds(106, 64, 86, 20);
+		frame.getContentPane().add(lblNewLabel_2);
+		
+		JButton info = new JButton("");
+		info.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "This is an encryption and decrypting device there's no output visible to the user due to security reasons \n The output is directly copied into your clipboard.","Info",JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		info.setIcon(new ImageIcon(Main.class.getResource("/icon/icons8-info-48.png")));
+		info.setBounds(726, 11, 48, 48);
+		info.setOpaque(false);
+		info.setContentAreaFilled(false);
+		info.setBorderPainted(false);
+		info.setFocusable(false);
+		frame.getContentPane().add(info);
+		
+	
+		JButton decrypt = new JButton("Decrypt");
+		decrypt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					File file = new File("D:\\sc.txt");
+					FileWriter wri = new FileWriter(file,true);
+				//	wri.write("\n");
+					 
+				
+			
+				//JOptionPane.showMessageDialog(null, "Pay me $5 to get message","Trial/Error420",JOptionPane.ERROR_MESSAGE);
+				//JOptionPane.showMessageDialog(null, "JK lol","Trial/Error420",JOptionPane.INFORMATION_MESSAGE);
+				char a[] = raw.getText().toCharArray();
+				int c ,shift;
+				//System.out.println("Type the number to shift ");
+				//d = word.nextInt();
+				//word.close();
+				shift = Integer.parseInt(d.getText());
+				for(int size = 0;size<a.length;size++) {
+					c = a[size];
+					if(a[size] > 96 &&a[size] < 123) {
+						c = c-shift;
+						if(c<97) {
+							c =a[size]+26-shift;
+							//System.out.print(" "+c +" ");
+							//ans.setText(Character.toString((char)c));
+							//System.out.print((char)c);
+						}
+						else {
+							//ans.setText(Character.toString((char)c));
+						//System.out.print((char)c);
+						}
+					wri.write((char)c);
+					}
+					else {
+					}	
+					
+				}
+				wri.close();
+				Scanner sc = new Scanner(file);
+				last = sc.next();
+				//ans.setText(sc.next());
+				//System.out.println(last);
+				sc.close();		
+				file.delete();
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(last),null);
+				}
+				catch (Exception ex) {
+			    ex.printStackTrace();
+					
+				}
+			}
+			
+		});
+		decrypt.setForeground(Color.WHITE);
+		decrypt.setFont(new Font("Arial", Font.BOLD, 25));
+		decrypt.setBounds(402, 298, 140, 39);
+		decrypt.setOpaque(false);
+		decrypt.setContentAreaFilled(false);
+		decrypt.setBorderPainted(false);
+		decrypt.setFocusable(false);
+		frame.getContentPane().add(decrypt);
+		
+		JLabel background = new JLabel("");
+		background.setIcon(new ImageIcon(Main.class.getResource("/icon/old-wooden-texture-background-vintage_55716-1138.jpg")));
+		background.setBounds(-16, 0, 800, 600);
+		frame.getContentPane().add(background);
+		
+		
+		
+	
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}
